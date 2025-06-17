@@ -14,7 +14,7 @@ import {
 import "./home.scss";
 import bg from "./assets/bg.png";
 import { fullStartingBoard, roomSlots } from "./context/data";
-import { GlobalChat, Loading } from "./components/templates";
+import { GlobalChat, Loading, UserModal } from "./components/templates";
 import { RiTwitterXLine } from "react-icons/ri";
 
 // Board setup üretici:
@@ -149,6 +149,13 @@ export const App = () => {
     return () => clearInterval(interval);
   }, [activeRoom]);
 
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("color-clash-user");
+    if (user) setAuthorized(true);
+  }, []);
+
   const startLoading = (slot) => {
     setLoading(true);
     setTimeout(() => {
@@ -251,7 +258,7 @@ export const App = () => {
       <img src={bg} alt="background" className="background" />
       <div className="left-panel">
         <div className="new-match">
-          <h1 className="title">COLOR CLASH CHESS</h1>
+          <h1 className="title">The Trenches Chess</h1>
           <div className="df gap-10 aic">
             <small>{onlineUsers} ONLINE</small>
             <small className="df aic gap-10 cp">
@@ -323,6 +330,7 @@ export const App = () => {
       </div>
 
       {loading && <Loading />}
+      {!authorized && <UserModal onFinish={() => setAuthorized(true)} />}
     </div>
   );
 };

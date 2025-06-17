@@ -140,3 +140,66 @@ export const Loading = () => {
     </div>
   );
 };
+
+// avatarları roomSlots'tan çıkartıyoruz:
+const allAvatars = [
+  "https://static.vecteezy.com/system/resources/previews/011/483/813/non_2x/guy-anime-avatar-free-vector.jpg",
+  "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png",
+  "https://static.vecteezy.com/system/resources/previews/011/483/377/non_2x/anime-girl-avatar-free-vector.jpg",
+  "https://static.vecteezy.com/system/resources/thumbnails/011/484/063/small_2x/boy-anime-avatar-free-vector.jpg",
+  "https://static.vecteezy.com/ti/vettori-gratis/p1/11483944-anime-ragazzo-ritratto-gratuito-vettoriale.jpg",
+  "https://img.freepik.com/premium-photo/subtle-elegance-minimalistic-animestyle-user-avatar-black-female-simple-color-patterns-ve_983420-37443.jpg",
+  "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/234080722/original/c99ca05f1d79fda61836b70e991fae719025cc85/create-anime-style-avatar-or-profile-picture.png",
+  "https://static.vecteezy.com/system/resources/thumbnails/011/484/893/small_2x/teen-boy-anime-free-vector.jpg",
+];
+
+export const UserModal = ({ onFinish }) => {
+  const [username, setUsername] = useState("");
+  const [selectedAvatar, setSelectedAvatar] = useState(allAvatars[0]);
+
+  const handleSave = () => {
+    if (!username.trim()) return alert("Please enter username");
+    localStorage.setItem(
+      "color-clash-user",
+      JSON.stringify({ username, avatar: selectedAvatar })
+    );
+    onFinish();
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="df fdc aic gap-10 modal-content">
+        <h2>Welcome to Our Platform</h2>
+        <small>
+          Please enter your username and select an avatar to get started.
+        </small>
+
+        <input
+          type="text"
+          placeholder="Enter your username..."
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="username-input"
+        />
+
+        <div className="avatar-grid">
+          {allAvatars.map((avatar, idx) => (
+            <img
+              key={idx}
+              src={avatar}
+              alt={`avatar-${idx}`}
+              className={`avatar-option ${
+                selectedAvatar === avatar ? "selected" : ""
+              }`}
+              onClick={() => setSelectedAvatar(avatar)}
+            />
+          ))}
+        </div>
+
+        <button className="save-btn" onClick={handleSave}>
+          Enter The Arena
+        </button>
+      </div>
+    </div>
+  );
+};
