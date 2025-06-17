@@ -33,7 +33,7 @@
 }
 
 .title {
-  font-size: 4rem;
+  font-size: 3.8rem;
   font-weight: 900;
   background: linear-gradient(90deg, #ff60d6, #00ffe7);
   -webkit-background-clip: text;
@@ -41,7 +41,6 @@
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 15px #60a0ff;
   margin-bottom: 20px;
-  // backdrop-filter: blur(10px);
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
 }
 
@@ -49,10 +48,11 @@
   font-size: 1.2rem;
   color: #ff9a00;
   margin: 30px 0;
-  // -webkit-backdrop-filter: blur(10px);
 
   small {
-    padding: 5px 10px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 8px 10px 5px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.1);
     color: #ff9a00;
@@ -70,8 +70,9 @@
 }
 
 .room-slot {
-  padding: 10px 20px;
-  border-radius: 20px;
+  position: relative;
+  padding: 30px 20px 10px;
+  border-radius: 15px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
@@ -155,7 +156,7 @@
 .room-status {
   font-weight: 600;
   font-size: 1rem;
-  text-shadow: 0 0 5px #000;
+  color: #000;
 }
 
 .start-button-wrapper {
@@ -175,6 +176,19 @@
   &:hover {
     transform: scale(1.1);
   }
+}
+
+.viewers-count {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 0.6rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 20;
 }
 
 /* From Uiverse.io by augustin_4687 */
@@ -264,9 +278,9 @@
     opacity: 0.1;
   }
 
-  &:hover::before {
-    opacity: 1;
-  }
+  // &:hover::before {
+  //   opacity: 1;
+  // }
 
   & > div {
     width: 96%;
@@ -406,7 +420,7 @@
 .leaderboard-header {
   display: flex;
   justify-content: space-between;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 15px;
   background: linear-gradient(90deg, #ff60d6, #00ffe7);
@@ -422,7 +436,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 5px 0;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   span {
     font-weight: 600;
   }
@@ -542,7 +556,7 @@
 
 .chat-header {
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   margin-bottom: 15px;
   display: flex;
   align-items: center;
@@ -552,7 +566,7 @@
 }
 
 .chat-content {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   display: flex;
   flex-direction: column;
   gap: 10px;

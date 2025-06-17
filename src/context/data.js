@@ -31,7 +31,7 @@ export const roomSlots = [
     },
     {
         id: 3,
-        status: "IN PROGRESS",
+        status: "WAITING",
         players: [
             {
                 name: "Hiro",
@@ -91,7 +91,7 @@ export const roomSlots = [
     },
     {
         id: 7,
-        status: "IN PROGRESS",
+        status: "WaTCHING",
         players: [
             {
                 name: "Renji",
@@ -126,8 +126,8 @@ export const fullStartingBoard = [
     { type: "bishop", side: "white" },
     { type: "knight", side: "white" },
     { type: "rook", side: "white" },
-  ];
-  
+];
+
 export const imgs = [
     "https://oficialbac.com.br/cdn/shop/products/BAC21_2.jpg?v=1681937165",
     "https://cea.vtexassets.com/arquivos/ids/58410395/top-cropped-halter-neck-de-poliamida-off-white-1028226-Off_White_1.jpg?v=638405751972130000",
@@ -143,4 +143,3 @@ export const imgs = [
     "https://img.pica-cdn.com/image/aigc/2b52aa71d77e477588b2456eb9429254.webp",
     "https://img.pica-cdn.com/image/aigc/e3a4127804880f4f94448ec6dbe79003.webp",
 ];
-  

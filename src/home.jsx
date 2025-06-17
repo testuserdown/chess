@@ -15,6 +15,7 @@ import "./home.scss";
 import bg from "./assets/bg.png";
 import { fullStartingBoard, roomSlots } from "./context/data";
 import { GlobalChat, Loading } from "./components/templates";
+import { RiTwitterXLine } from "react-icons/ri";
 
 // Board setup üretici:
 const getBoardSetup = (status) => {
@@ -33,12 +34,10 @@ const getBoardSetup = (status) => {
   return Array(64).fill(null);
 };
 
-// Taş render fonksiyonu (renkli):
+// Taş render fonksiyonu:
 const renderPiece = (piece) => {
   if (!piece) return null;
-
   const color = piece.side === "white" ? "#f90bed" : "#ffe600";
-
   const iconProps = { className: "chess-piece", style: { color } };
 
   switch (piece.type) {
@@ -59,6 +58,7 @@ const renderPiece = (piece) => {
   }
 };
 
+// Oyuncular:
 const allPlayers = [
   { name: "Takashi", code: "jp" },
   { name: "Yuzu", code: "kr" },
@@ -72,55 +72,80 @@ const allPlayers = [
   { name: "Miyuki", code: "ru" },
 ];
 
-// Leaderboard generator:
+// Leaderboard:
 const generateLeaderboard = () => {
   const shuffled = [...allPlayers].sort(() => 0.5 - Math.random());
   const selected = shuffled.slice(0, 5);
   return selected
     .map((player) => ({
       ...player,
-      score: Math.floor(Math.random() * 500) + 1500,
+      score: Math.floor(Math.random() * 101),
       flag: `https://flagcdn.com/w80/${player.code}.png`,
     }))
-    .sort((a, b) => b.score - a.score); // skora göre sırala
+    .sort((a, b) => b.score - a.score);
 };
+
+// Room izleyici üret:
+const generateRoomViewers = () => {
+  return roomSlots.map((room) => ({
+    ...room,
+    viewers: Math.floor(Math.random() * 20) + 5,
+  }));
+};
+
 export const App = () => {
   const [activeRoom, setActiveRoom] = useState(null);
-  const [onlineUsders, setOnlineUsers] = useState(432);
+  const [onlineUsers, setOnlineUsers] = useState(50);
   const [leaders, setLeaders] = useState(generateLeaderboard());
+  const [roomsWithViewers, setRoomsWithViewers] = useState(
+    generateRoomViewers()
+  );
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(300000);
 
+  // Leaderboard refresh:
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLeaders(generateLeaderboard());
-    }, 15000);
-
+    const interval = setInterval(
+      () => setLeaders(generateLeaderboard()),
+      15000
+    );
     return () => clearInterval(interval);
   }, []);
 
+  // Online users refresh:
   useEffect(() => {
-    // Simulate fetching online users
     const interval = setInterval(() => {
-      setOnlineUsers((prev) => prev + Math.floor(Math.random() * 10 - 5));
+      setOnlineUsers((prev) => {
+        let next = prev + Math.floor(Math.random() * 7 - 3);
+        if (next < 35) next = 35;
+        if (next > 65) next = 65;
+        return next;
+      });
     }, 5000);
-
     return () => clearInterval(interval);
   }, []);
 
+  // Room viewers refresh:
   useEffect(() => {
-    if (!activeRoom) return; // sadece oyun başladığında çalışsın
+    const interval = setInterval(
+      () => setRoomsWithViewers(generateRoomViewers()),
+      10000
+    );
+    return () => clearInterval(interval);
+  }, []);
 
+  // Timer:
+  useEffect(() => {
+    if (!activeRoom) return;
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 0) {
           clearInterval(interval);
           return 0;
         }
-        return prev - 1000; // her saniye azalt
+        return prev - 1000;
       });
     }, 1000);
-
     return () => clearInterval(interval);
   }, [activeRoom]);
 
@@ -128,11 +153,12 @@ export const App = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setTimer(300000); // Her yeni oyunda timer'ı sıfırla
+      setTimer(300000);
       setActiveRoom(slot);
     }, 4000);
   };
 
+  // GAME SCREEN
   if (activeRoom) {
     const boardData = getBoardSetup(activeRoom.status);
 
@@ -169,20 +195,16 @@ export const App = () => {
           <div className="board-body">
             <div
               aria-label="User Login Button"
-              tabindex="0"
+              tabIndex="0"
               role="button"
-              class="user-profile"
+              className="user-profile"
               onClick={() => setActiveRoom(null)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  setActiveRoom(null);
-                }
-              }}
             >
-              <div class="user-profile-inner">
+              <div className="user-profile-inner">
                 <p>Go Back</p>
               </div>
             </div>
+
             <div className="chess-grid">
               {boardData.map((piece, idx) => (
                 <div
@@ -223,17 +245,23 @@ export const App = () => {
     );
   }
 
-  // LOBBY
+  // LOBBY SCREEN
   return (
     <div className="main-layout">
       <img src={bg} alt="background" className="background" />
       <div className="left-panel">
         <div className="new-match">
           <h1 className="title">COLOR CLASH CHESS</h1>
-          <small>{onlineUsders} ONLINE</small>
+          <div className="df gap-10 aic">
+            <small>{onlineUsers} ONLINE</small>
+            <small className="df aic gap-10 cp">
+              Follow us <RiTwitterXLine />
+            </small>
+          </div>
         </div>
+
         <div className="room-grid">
-          {roomSlots.map((room, index) => (
+          {roomsWithViewers.map((room, index) => (
             <div
               key={room.id}
               className={`room-slot slot-${index + 1} ${room.color}`}
@@ -250,17 +278,13 @@ export const App = () => {
                 ))}
               </div>
               <div className="room-status">{room.status}</div>
+              <div className="viewers-count">
+                {room.viewers + 2}/{room.viewers} viewers
+              </div>
             </div>
           ))}
-          <button
-            class="button"
-            onClick={() => startLoading(roomSlots[0])}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                startLoading({ status: "NEW GAME", players: [] });
-              }
-            }}
-          >
+
+          <button className="button" onClick={() => startLoading(roomSlots[0])}>
             <div>
               <div>
                 <div>START GAME</div>
@@ -272,18 +296,16 @@ export const App = () => {
 
       <div className="right-panel">
         <GlobalChat />
-
         <div className="leaderboard">
           <div className="leaderboard-header">
             <div className="leaderboard-title">LEADERBOARD</div>
             <FaCrown className="crown-icon" />
           </div>
-
           {leaders.map((player, index) => (
             <div className="df gap-10 mt-10" key={index}>
               <FaUserAlt />
               <div className="w100 df fdc gap-5">
-                <div className="df aic jcsb fs-20">
+                <div className="df aic jcsb fs-14">
                   <span className="player-name">{player.name}</span>
                   <img
                     src={player.flag}
@@ -291,7 +313,7 @@ export const App = () => {
                     className="flag-icon"
                   />
                 </div>
-                <span className="fs-14" style={{ color: "red" }}>
+                <span className="fs-12" style={{ color: "red" }}>
                   {player.score}
                 </span>
               </div>
@@ -299,6 +321,7 @@ export const App = () => {
           ))}
         </div>
       </div>
+
       {loading && <Loading />}
     </div>
   );

@@ -12,7 +12,7 @@
 
   .chat-header {
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     margin-bottom: 15px;
     background: linear-gradient(90deg, #ff60d6, #00ffe7);
     -webkit-background-clip: text;
@@ -46,7 +46,7 @@
   }
 
   .event-line {
-    font-size: 1.05rem;
+    font-size: 0.9rem;
     line-height: 1.4;
     animation: fadeIn 0.5s ease;
     display: flex;
@@ -80,7 +80,7 @@
   .name {
     font-weight: bold;
     color: #ff60d6;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 
   @keyframes fadeIn {
